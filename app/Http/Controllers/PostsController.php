@@ -172,6 +172,7 @@ class PostsController extends Controller
         return redirect('/')->with('error','Not allow to access Unauthorized pages');
        // $post->delete();
        $post->deleted = true;
+       $post->deleted_at = date('Y-m-d h:i:s');
        $post->save();
         return redirect('/post')->with('success', 'Post Deleted');
     }

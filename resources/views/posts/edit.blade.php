@@ -11,8 +11,8 @@
                 {{Form::label('Your Post', 'Post')}}
                 {{Form::textarea('Body', $post->body, ['class'=>'form-control', 'placeholder'=>'Enter your post here'])}}
              </div>
-             <div class = "form-group" style = "width:30%;">
-                    {{Form::file('cover_image')}}
+             <div class = "form-group">
+                    {{Form::file('cover_image', ['class'=>'form-control', 'placeholder'=>'Title'])}}
                 </div>
              {{Form::hidden('_method','PUT')}}
              {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}

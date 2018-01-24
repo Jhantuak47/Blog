@@ -3,27 +3,25 @@
 @section('content')
 <div class="container">
     <div class="row">
-            <div class = "col-md-4 col-sm-4">   
-                <img style = "width:80%" src = "/storage/profile_img/{{auth()->user()->profile_img}}">
+            <div class = "col-md-3 col-sm-3">   
+                <img style = "width:60%" src = "/storage/profile_img/{{auth()->user()->profile_img}}">
                          @if(auth()->user()->profile_img == 'no_image.jpg')
-                         <div class = "">
                              <strong> Uplode Your Pofile Picture</strong>
-                             {!! Form::open(['url'=>'/upload_profile_pics','method'=>'POST','enctype'=>'multipart/form-data']) !!}
-                                {{Form::file('profile_img')}}
-                                {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}
-                             {!! Form::close() !!}
-                            </div>
                         @else
-                        <div class = "">
-                                <strong> Change Your Pofile Picture</strong>
-                                {!! Form::open(['url'=>'/upload_profile_pics','method'=>'POST','enctype'=>'multipart/form-data']) !!}
-                                   {{Form::file('profile_img')}}
-                                   {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}
-                                {!! Form::close() !!}
+                        <div class='container'>
+                            <strong> Change Your Pofile Picture</strong>
                         </div>
                          @endif
-                </div>
-        <div class= "col-md-6 col-sm-6">
+
+                    {!! Form::open(['url'=>'/upload_profile_pics','method'=>'POST','enctype'=>'multipart/form-data', ]) !!}
+                      <div class = "form-group">
+                        {{Form::file('profile_img', ['class'=>'form-control'])}}
+                      </div>
+                        {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}
+                      
+                    {!! Form::close() !!}
+            </div>
+        <div class= "col-md-7 col-sm-7">
             <div class="panel panel-default">
                 <div class="panel-heading"><strong style = "font-size: 30px;">Dashboard</strong></div>
 
