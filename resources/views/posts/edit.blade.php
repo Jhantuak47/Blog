@@ -1,20 +1,24 @@
+
 @extends('layouts.app');
 
     @section('content')
         <h2>Edit Post<h2>
-            {!! Form::open(['action'=>['PostsController@update', $post->id],'method'=>'POST', 'enctype'=>'multipart/form-data']) !!}
-             <div class = "form-group">
-                {{Form::label('title', 'Title')}}
-                {{Form::text('title', $post->title, ['class'=>'form-control', 'placeholder'=>'Title'])}}
-             </div>
-             <div class = "form-group">
-                {{Form::label('Your Post', 'Post')}}
-                {{Form::textarea('Body', $post->body, ['class'=>'form-control', 'placeholder'=>'Enter your post here'])}}
-             </div>
-             <div class = "form-group">
-                    {{Form::file('cover_image', ['class'=>'form-control', 'placeholder'=>'Title'])}}
+            <form action="{{ action('PostsController@update', $post->id) }}", method="POST", enctype="multipart/form-data">
+                 {{ csrf_field() }}
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="post_title" value="{{$post->title}}" class="form-control">
                 </div>
-             {{Form::hidden('_method','PUT')}}
-             {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}
-            {!! Form::close() !!}
+                <div class="form-group">
+                    <label>Your Post</label>
+                    <textarea class="form-control" rows="4">{{$post->body}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputFile">Upload Image</label>
+                    <input type="file" name="cover_image" class="form-control" aria-describedby="fileHelp">
+                    <small id="fileHelp" class="form-text text-muted">image type should be jpg/png and not more than 1MB.</small>
+                </div>
+                <input name="_method" type="hidden" value="PUT">
+                <input type="submit" name="" id = "submit" class="btn btn-primary" value="submit">
+            </form>
     @endsection

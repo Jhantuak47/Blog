@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Post;
 use DB;
 
@@ -32,8 +33,16 @@ class PostsController extends Controller
        //$post = Post::orderBy('title','Desc')->take(1)->get();//limit the data 1 or 10.
        //$allPosts = DB::select('SELECT * FROM posts');
        //$allPosts = Post::orderBy('title','Desc')->paginate(10);
-       $allPosts = Post::where('deleted', false)->orderBy('created_at','Desc')->get();
-        return view('posts.index')->with('allPosts', $allPosts);
+       $allPosts = Post::where('deleted', false)
+       ->orderBy('created_at','Desc')
+       ->with('user')->paginate();
+      $postArray = array();
+      $i=0;
+      foreach ($allPosts as $post) {
+          $postArray[$i] = ['id'=>$post->id, 'title'=>$post->title, 'body'=>$post->body, 'created_at'=>date('M d,Y', strtotime($post->created_at)), 'user_name'=>$post->user->name,'image_path'=>$post->cover_image];
+          $i++;
+      }
+        return view('posts.index', compact('allPosts', 'postArray'));
     }
 
     /**
@@ -127,7 +136,11 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    {  
+
+         
+        // $url = Storage::url('cover_images/no_image.jpg'); //used to display the image..
+        // return "<img src = '".asset($url)."' />";
         $this->validate($request,[
             'title'=>'required',
             'Body'=>'required',
@@ -156,7 +169,7 @@ class PostsController extends Controller
                 }
                 $post->save();
     
-        return redirect('/post')->with('success','Post Created');
+        return redirect('/post')->with('success','Post Updated');
     }
 
     /**
@@ -175,5 +188,8 @@ class PostsController extends Controller
        $post->deleted_at = date('Y-m-d h:i:s');
        $post->save();
         return redirect('/post')->with('success', 'Post Deleted');
+    }
+    public function paginate(){
+        return view('posts.pagination')->withUserdata($this->user);
     }
 }

@@ -12,14 +12,17 @@
                             <strong> Change Your Pofile Picture</strong>
                         </div>
                          @endif
-
-                    {!! Form::open(['url'=>'/upload_profile_pics','method'=>'POST','enctype'=>'multipart/form-data', ]) !!}
-                      <div class = "form-group">
-                        {{Form::file('profile_img', ['class'=>'form-control'])}}
-                      </div>
-                        {{Form::submit('Submit',['class' => 'btn btn-primary', 'id'=>'submit'])}}
-                      
-                    {!! Form::close() !!}
+            {!! Form::open(['url'=>'/upload_profile_pics','method'=>'POST','enctype'=>'multipart/form-data']) !!}
+            
+                <div class="form-group">
+                
+                         <div class = "well">
+                            {{Form::file('profile_img')}}
+                        </div>
+                </div>
+                {{Form::submit('Upload',['class' => 'btn btn-success', 'id'=>'Upload'])}}
+            {!! Form::close() !!}
+<upload-form></upload-form>
             </div>
         <div class= "col-md-7 col-sm-7">
             <div class="panel panel-default">
