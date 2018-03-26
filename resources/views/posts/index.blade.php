@@ -147,7 +147,8 @@
                     </div>
                 </div>
         </div>
-        <input type="hidden" id="id"/>
+        <input type="hidden" id="edit_post_id"/>
+        <span style="color: red" id = "blank_err"></span>
       </div>
       <div class="modal-footer">
         <div class="row">

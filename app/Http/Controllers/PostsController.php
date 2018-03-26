@@ -95,7 +95,7 @@ class PostsController extends Controller
       $post->user_id = auth()->user()->id;
       $post->cover_image = $fileNameToStore;
       $post->save();
-    
+        
         return redirect('/post')->with('success','Post Created');
     }
 
@@ -135,12 +135,13 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update_status(Request $request)
     {  
 
          
         // $url = Storage::url('cover_images/no_image.jpg'); //used to display the image..
         // return "<img src = '".asset($url)."' />";
+        return $request->body;
         $this->validate($request,[
             'title'=>'required',
             'Body'=>'required',
