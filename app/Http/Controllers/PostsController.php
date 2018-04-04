@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Post;
 use DB;
+use App\Http\Requests\UpdateStatusValidator;
 
 class PostsController extends Controller
 {
@@ -22,7 +24,7 @@ class PostsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->middleware('auth', ['except' => ['index', 'show','update_status']]);
     }
 
     public function index()
@@ -39,7 +41,7 @@ class PostsController extends Controller
       $postArray = array();
       $i=0;
       foreach ($allPosts as $post) {
-          $postArray[$i] = ['id'=>$post->id, 'title'=>$post->title, 'body'=>$post->body, 'created_at'=>date('M d,Y', strtotime($post->created_at)), 'user_name'=>$post->user->name,'image_path'=>$post->cover_image];
+          $postArray[$i] = ['id'=>$post->id, 'title'=>$post->title, 'body'=>$post->body, 'created_at'=>date('M d,Y', strtotime($post->created_at)), 'user_name'=>$post->user->name,'user_id'=>$post->user->id, 'image_path'=>$post->cover_image];
           $i++;
       }
         return view('posts.index', compact('allPosts', 'postArray'));
@@ -63,14 +65,14 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $this->validate($request,[
             'title'=>'required',
             'Body'=>'required',
             'cover_image'=> 'image|nullable|max:1999'
         ]);
-
-        //Handle file ..
-        if($request->hasFile('cover_image')){
+        if($request->hasFile('cover_image') || $request->src != null){
 
                 //Get file name with extention ...
                     $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
@@ -132,45 +134,40 @@ class PostsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_status(Request $request)
+    public function update_status(UpdateStatusValidator $request)
     {  
 
-         
         // $url = Storage::url('cover_images/no_image.jpg'); //used to display the image..
         // return "<img src = '".asset($url)."' />";
-        return $request->body;
-        $this->validate($request,[
-            'title'=>'required',
-            'Body'=>'required',
-            'cover_image'=> 'image|nullable|max:1999'
-        ]);
+        try{
+            if($request->hasFile('cover_image_edit')){
 
-        if($request->hasFile('cover_image')){
+                //Get file name with extention ...
+                    $fileNameWithExt = $request->file('cover_image_edit')->getClientOriginalName();
+                //Get just file name...
+                    $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);//geting only the file name without extention...
+                //Get just ext
+                    $extension = $request->file('cover_image_edit')->getClientOriginalExtension();
+                //File name to store..
+                    $fileNameToStore = $fileName.'_'.  time() . '.' .  $extension;
+                //Uploading the image ..
+                    $path = $request->file('cover_image_edit')->storeAs('public/cover_images', $fileNameToStore);
+            }
+            //Updating Post into the data base...
+                    $post = Post::find($request->input('hidden_id'));
+                    $post->titles = $request->input('title');
+                    $post->body = $request->input('textarea_body');
+                    if($request->hasFile('cover_image_edit')){
+                        $post->cover_image = $fileNameToStore;
+                    }
+                    $post->save();
+                 return response()->json(array('status'=>'success', 'message'=>'Post successfully updated'), 200);
+            }catch(\Exception $e){
+                return response()->json(array('status'=>'failure', 'message'=>$e->getMessage()), 200);
+            }   
 
-            //Get file name with extention ...
-                $fileNameWithExt = $request->file('cover_image')->getClientOriginalName();
-            //Get just file name...
-                $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);//geting only the file name without extention...
-            //Get just ext
-                $extension = $request->file('cover_image')->getClientOriginalExtension();
-            //File name to store..
-                $fileNameToStore = $fileName.'_'.  time() . '.' .  $extension;
-            //Uploading the image ..
-                $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
-        }
-        //Inserting Post into the data base...
-                $post = Post::find($id); ;
-                $post->title = $request->input('title');
-                $post->body = $request->input('Body');
-                if($request->hasFile('cover_image')){
-                    $post->cover_image = $fileNameToStore;
-                }
-                $post->save();
-    
-        return redirect('/post')->with('success','Post Updated');
     }
 
     /**

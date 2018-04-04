@@ -30,7 +30,6 @@
                                    </button>
                                    <button style="display:none ;font-size:20px; margin-top: 1px;" id="filter_button" class="btn-danger" onclick="removeFilter(event);"><i class="fa fa-remove"></i></button>
                                  </div> 
-                                      
                          </form>
                      </div>
                      <div class="col-md-3" style="">
@@ -46,7 +45,7 @@
                         <div class = "well">
                             <div class = "row">
                                 <div class = "col-md-2 col-sm-2">
-                                    <img style = "width:80%" src = "/storage/cover_images/{{$Post->cover_image}}">
+                                    <img width="100" height="100"  src = "/storage/cover_images/{{$Post->cover_image}}">
                                 </div>
                                 <div class = "col-md-6 col-sm-6">
                                     <h3 style="margin-top:2px;">
@@ -82,6 +81,7 @@
     <div class="modal-content ">
       <div class="modal-body">
         <div class="well">
+                    <span id="message"></span>
                 <div class="row">
                     <div class="col-md-4 col-sm-4">
                         <br><br>
@@ -104,15 +104,15 @@
                 <form action="" method="post" id = "modify_post">
                     {{csrf_field()}}
                     <input type="hidden" name="_method" value="delete" />
-                    <button class="btn btn-danger btn-lg pull-left" onclick="delete_post(event)" name=""><i class='fa fa-trash-o'></i>&nbsp;Delete</button>
+                    <button class="btn btn-danger btn-lg pull-left" onclick="delete_post(event)" name="" style="display: none;" id="delete_post_btn"><i class='fa fa-trash-o'></i>&nbsp;Delete</button>
                 </form>
             </div>
             <div class="col-md-4 col-sm-4">
-                <button type="button" style="margin-right:70px;" class="btn btn-default btn-lg" id="nobtn" data-dismiss="modal"><i class="fa fa-window-close"></i>&nbsp;Dismiss</button>
+                <button type="button" style="margin-right:70px;" class="btn btn-default btn-lg" id="dismiss_btn" data-dismiss="modal"><i class="fa fa-window-close"></i>&nbsp;Dismiss</button>
 
             </div>
             <div class="col-md-4 col-sm-4">
-                <a onclick="edit_post(event);" class="btn btn-primary btn-lg active" style="margin-left:100px"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Edit</a>
+                <a onclick="edit_post(event);" id = "edit_post_btn" class="btn btn-primary btn-lg active" style="margin-left:100px; display:none;" ><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Edit</a>
             </div>
         </div><!--end footer row -->
       </div>
@@ -120,7 +120,7 @@
  </div>
 </div>
 <!--Edit Modal -->
-<button type="button" id="edi_modalbtn" class="hidden" data-toggle="modal" data-target="#editmodal">Open Modal</button>
+<button type="button" id="edit_modalbtn" class="hidden" data-toggle="modal" data-target="#editmodal">Open Modal</button>
 <div id="editmodal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
 
@@ -131,30 +131,30 @@
           <h3 class="modal-title" id="demoheading">Edit Post</h3>
         </div>
       <div class="modal-body">
+        <form action="" method="post" id = "modify_post_edit" enctype="multipart/form-data">
+          <meta name="csrf-token" content="{{ csrf_token() }}">
         <div class="well">
                 <div class="row">
                     <div class="col-md-4 col-sm-4">
                         <br><br>
-                        <img style="width:90%; height:36%" src="" id = "modal_cover_image_edit">
+                        <img style="width:90%; height:36%" src="" id = "modal_cover_image_edit" name = "cover_image">
                         <hr>
                         <input type="file" name="cover_image_edit" id="cover_image_edit">
                     </div>
                     <div class="col-md-8 col-sm-8">
-                        <input style="display: none;height:33px;font-size:16pt;" type="text" name="post_title" id="edit_title"><hr>
+                        <input style="display: none;height:33px;font-size:16pt;" type="text" name="title" id="edit_title"><hr>
                         <p id = "modal_body_edit"></p>
                         <hr>
                         <small id = "author_edit"></small>
                     </div>
                 </div>
         </div>
-        <input type="hidden" id="edit_post_id"/>
+        <input type="hidden" id="edit_post_id" name="hidden_id"/>
         <span style="color: red" id = "blank_err"></span>
       </div>
       <div class="modal-footer">
         <div class="row">
             <div class="col-md-6 col-sm-6">
-                <form action="" method="post" id = "modify_post">
-                    {{csrf_field()}}
                     <button class="btn btn-success btn-lg pull-left" onclick="save_changes(event)" name="">Save Changes</button>
                 </form>
             </div>

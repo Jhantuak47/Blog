@@ -19,7 +19,7 @@
     @include('inc.navbar')
       <div class = "container" style = "width: 70%;">
         @include('inc.messages')
-        @include('inc.loader');
+        @include('inc.loader')
         @yield('content')
       </div>
       @stack('scripts')

@@ -29,6 +29,6 @@ Route::post('/upload_profile_pics','UsersController@upload_profile_pics');
 Route::get('/profile', function () {
         return view('profilepics');
 });
-Route::post('/edit_post',"PostsController@update")->name('edit_post');
+Route::post('/edit_post',"PostsController@update_status")->name('edit_post');
 Route::post('/upload', 'ImageController@upload')->name('upload');
 Route::get('/pagination', 'PostsController@paginate')->name('pagination')->middleware('auth','role');

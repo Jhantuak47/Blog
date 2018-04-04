@@ -1,5 +1,4 @@
 
-
 <div id='cssmenu'>
 <ul class = "nav navbar-anv navbar-left">
     <a class="navbar-brand" href="{{ url('/') }}">
@@ -36,4 +35,3 @@
       @endguest
 </ul>
 </div>
-
