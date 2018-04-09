@@ -70,7 +70,6 @@
 					//data: {'id':id, 'title': title, 'body':body,'cover_image':cover_image,_token:'{{csrf_token()}}'},
 					beforeSend:   function(){$('.loadingDiv').show();},
 					success: function(data){
-						console.log(data.status);
 						if(data.status == 'success'){
 							// $('#message').html('Post updated !').css('color', 'green');
 							// $('#nobtn').click();
